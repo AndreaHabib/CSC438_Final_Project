@@ -1,33 +1,48 @@
 import React from "react";
-import "./signup.css";
+import { Link } from "react-router-dom"
+import { useState } from 'react';
+import { createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import { auth } from "../../firebase-config";
+// import "./signup.css";
 
-const Signup = () => {
+function Signup() {
+
+    const [registerEmail, setRegisterEmail] = useState("");
+    const [registerPassword, setRegisterPassword] = useState("");
+    const [user, setUser] = useState({});
+
+    const register = async () => {
+
+        try {
+            const user = await createUserWithEmailAndPassword(auth, registerEmail, registerPassword);
+            console.log(user);
+        } catch (error) {
+            console.log(error.message);
+        }
+
+        if (user) {
+            window.location.href = "/home";
+        }
+    };
+
+
     return (
-        <div className="signup">
-        <div className="signup-container">
-            <div className="signup-header">
+        <div>
             <h1>Signup</h1>
-            </div>
-            <div className="signup-form">
-            <form>
-                <label>
-                <input type="email" placeholder="Email" />
-                </label>
-                <label>
-                <input type="text" placeholder="Username" />
-                </label>
-                <label>
-                <input type="password" placeholder="Password" />
-                </label>
-                <button>Signup</button>
-            </form>
-            //need to login
-                    <p>Return to Login <link to="/"> Click Here </link></p>
-                    
-            </div>
-        </div>
-        </div>
-    );
-    }
 
-    export default Signup;
+
+            <input placeholder="Email" onChange={(event) => { setRegisterEmail(event.target.value); }} />
+            <input placeholder="Password" onChange={(event) => { setRegisterPassword(event.target.value); }} /> 
+
+            <button onClick={register}>Signup</button>
+
+
+            <h2>Return to Login <Link to="/"> Click Here </Link></h2>
+
+
+        </div>
+
+    );
+}
+
+export default Signup;

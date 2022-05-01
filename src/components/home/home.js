@@ -1,15 +1,30 @@
 import React from "react";
 
-const Home = () => {
+import {auth} from "../../firebase-config";
+import {onAuthStateChanged, signOut} from "firebase/auth";
+import {useState} from "react";
+
+function Home() {
+
+    const [user, setUser] = useState({});
+
+    onAuthStateChanged(auth, (currentUser) => {
+        setUser(currentUser);
+    });
+
+    const logout = async () => {
+        await signOut(auth);
+    };
+
     return (
-        <div className="home">
-            <div className="home-container">
-                <div className="home-header">
-                    <h1>Home</h1>
-                </div>
-                <div className="home-form">
-                </div>
-            </div>
+        <div>
+                    <h1>{user?.email}</h1>
+
+                    <button onClick={logout}>Logout</button>
+               
+                
         </div>
     );
 }
+
+export default Home;
