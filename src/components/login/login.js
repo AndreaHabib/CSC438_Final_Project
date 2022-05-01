@@ -18,6 +18,9 @@ const Login = () => {
                         </label>
                         <button>Login</button>
                     </form>
+                    //need to sign up
+                    <p>Need to SignUp? <link to="/signup"> Click Here </link></p>
+                    
                 </div>
             </div>
         </div>
