@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom"
 import { useState } from 'react';
-import { createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import { createUserWithEmailAndPassword} from "firebase/auth";
 import { auth } from "../../firebase-config";
 // import "./signup.css";
 
@@ -10,6 +10,8 @@ function Signup() {
     const [registerEmail, setRegisterEmail] = useState("");
     const [registerPassword, setRegisterPassword] = useState("");
     const [user, setUser] = useState({});
+
+    
 
     const register = async () => {
 
