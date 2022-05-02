@@ -41,7 +41,6 @@ class ApiClient {
     getDiscoverMovies(){
         return this.get(`/discover/movie`);
     }
-
     async get(url) {
         const fullUrl = this.getFullUrl(url);
         return await fetch(fullUrl)
@@ -49,5 +48,7 @@ class ApiClient {
         .then(data => data.results)
         .catch(e => e.message)
     }
+    
+    
 }
 export default ApiClient;
