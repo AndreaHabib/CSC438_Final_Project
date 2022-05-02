@@ -2,7 +2,7 @@
 class ApiClient {
     constructor(key, baseUrl, end) {
         this.baseUrl = 'https://api.themoviedb.org/3';
-        
+        this.end = `?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`
     }
     getFullUrl(url) {
         return `${this.baseUrl}${url}${this.end}`;

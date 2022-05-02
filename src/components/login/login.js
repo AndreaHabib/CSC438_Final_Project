@@ -1,12 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { Link } from "react-router-dom"
 import './login.css';
 import {signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../firebase-config";
+import ApiClient from '../../api/ApiClient';
 
 function Login() {
-
+    useEffect(() => {
+        const api = new ApiClient();
+        api.getTrendingMovies().then(data => {
+            console.log(data);
+        }
+        );
+    },[])
     const [loginEmail, setLoginEmail] = useState("");
     const [loginPassword, setLoginPassword] = useState("");
     const [user, setUser] = useState({});
