@@ -1,8 +1,8 @@
 import React from "react";
-
 import {auth} from "../../firebase-config";
 import {onAuthStateChanged, signOut} from "firebase/auth";
 import {useState} from "react";
+import { Link } from "react-router-dom"
 
 function Home() {
 
@@ -20,7 +20,7 @@ function Home() {
         <div>
                     <h1>{user?.email}</h1>
 
-                    <button onClick={logout}>Logout</button>
+                    <button onClick={logout}><Link to="/"> Logout </Link> </button>
                
                 
         </div>
