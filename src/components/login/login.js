@@ -1,3 +1,4 @@
+
 import { useState, React } from 'react';
 import { signInWithEmailAndPassword, getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { Link } from "react-router-dom"
@@ -5,9 +6,6 @@ import './login.css';
 
 
 function Login() {
-
-
-
     const [loginEmail, setLoginEmail] = useState("");
     const [loginPassword, setLoginPassword] = useState("");
     const [user, setUser] = useState({});
