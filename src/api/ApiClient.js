@@ -1,6 +1,18 @@
 
 class ApiClient {
     
+    getFullUrl(url) {
+        return `${this.baseUrl}${url}${this.end}`;
+    }
+
+    getMovie(id){
+        return this.get(`/movie/${id}`);
+    }
+
+    getGenreList(){
+        return this.get(`/genre/movie/list`);
+    }
+
 
 
 
@@ -8,7 +20,8 @@ class ApiClient {
         const fullUrl = this.getFullUrl(url);
         return await fetch(fullUrl)
         .then(response => response.json())
-    
+        .then(data => data.results)
+        .catch(e => e.message)
     }
     
     async post(url, data) {
