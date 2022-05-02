@@ -1,7 +1,6 @@
-import React from "react";
+import {useState, React} from "react";
 import {auth} from "../../firebase-config";
 import {onAuthStateChanged, signOut} from "firebase/auth";
-import {useState} from "react";
 import { Link } from "react-router-dom"
 
 function Home() {

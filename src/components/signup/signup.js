@@ -1,9 +1,8 @@
-import React from "react";
-import { Link } from "react-router-dom"
-import { useState } from 'react';
+import {useState, React} from "react";
+import { Link } from "react-router-dom";
 import { createUserWithEmailAndPassword} from "firebase/auth";
 import { auth } from "../../firebase-config";
-// import "./signup.css";
+import "./signup.css";
 
 function Signup() {
 
