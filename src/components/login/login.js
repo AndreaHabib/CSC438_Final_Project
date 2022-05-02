@@ -4,6 +4,9 @@ import { signInWithEmailAndPassword, getAuth, signInWithPopup, GoogleAuthProvide
 import { Link } from "react-router-dom"
 import './login.css';
 
+// import { useEffect } from 'react';
+// import ApiClient from '../../api/ApiClient'
+
 
 function Login() {
     const [loginEmail, setLoginEmail] = useState("");
@@ -13,7 +16,13 @@ function Login() {
 
     const provider = new GoogleAuthProvider();
     const auth = getAuth();
-
+    // sample use of api client
+    // useEffect(() => {
+    //     const api = new ApiClient();
+    //     api.getTrendingMovies().then(data => {
+    //         console.log(data);
+    //         });
+    // })
     const signInWithGoogle = async () => {
         signInWithPopup(auth, provider)
             .then((result) => {
