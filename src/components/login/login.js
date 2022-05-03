@@ -14,25 +14,7 @@ function Login() {
     const provider = new GoogleAuthProvider();
     const auth = getAuth();
 
-    const signInWithGoogle = async () => {
-        signInWithPopup(auth, provider)
-            .then((result) => {
-                const credential = GoogleAuthProvider.credentialFromResult(result);
-                const token = credential.accessToken;
-                const user = result.user;
-                window.location.href = "/home";
-            }).catch((error) => {
-                const errorCode = error.code;
-                console.log(errorCode);
-                const errorMessage = error.message;
-                console.log(errorMessage);
-                const email = error.email;
-                console.log(email);
-                const credential = GoogleAuthProvider.credentialFromError(error);
-                console.log(credential);
-
-            });
-    }
+    
 
 
     const login = async () => {
