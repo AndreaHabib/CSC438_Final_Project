@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, serverTimestamp, collection, doc, setDoc, addDoc } from 'firebase/firestore/lite'
-import { getAuth } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword} from "firebase/auth";
+
 
 const firebaseConfig = {
     apiKey: "AIzaSyBlvfpqekQfced27CTFDIapAya1hE6yUhY",
@@ -41,6 +42,7 @@ async function userregister(email, password) {
 }
 
 async function loginInWithGoogle() {
+    const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)
         .then((result) => {
             const credential = GoogleAuthProvider.credentialFromResult(result);
@@ -71,20 +73,7 @@ async function signOut() {
 
 
 export function getFavoriteMovies(uid) {
-
-    const collectionRef = collection(getFirestore(), this.collectionPath);
-    const docRef = doc(getFirestore(), this.docPath);
-    const setDocRef = setDoc(getFirestore(), this.docPath);
-    const docId = await createPromise(collectionRef, docRef, setDocRef);
-    
-
-    await setDoc(doc(collectionRef, id), dataToCreate).then(() => id)
-    return {
-        id: docId,
-        ...data,
-        createTimestamp: new Date(),
-        updateTimestamp: new Date()
-    }
+    return collection('users').doc(uid).collection('favoriteMovies').get();
 }
 
 
