@@ -7,6 +7,7 @@ import {
   setDoc,
   addDoc,
   getDocs,
+  getDoc,
 } from "firebase/firestore/lite";
 import {
   getAuth,
@@ -42,11 +43,10 @@ const db = getFirestore(app);
 export const auth = getAuth(app);
 
 export async function getUserInfo(uid) {
-  const users = collection(db, "users");
-  const user = await getDocs(users, {
-    where: ["uid", "==", uid],
-  });
-  return user.docs.map((doc) => doc.data())[0];
+  const usersCol = collection(db, "users");
+  const userDoc = doc(usersCol, uid);
+  const user = await getDoc(userDoc);
+  return user.data();
 }
 
 async function userlogin(email, password) {
