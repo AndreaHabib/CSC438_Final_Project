@@ -61,6 +61,28 @@ export const updateUserInfo = async (uid, data) => {
   await setDoc(userDoc, data);
 };
 
+export const deleteFavoriteTvShow = async (uid, tvShowId) => {
+  const userDoc = getUsersDoc(uid);
+  const user = await getDoc(userDoc);
+  const data = {
+    favoriteTvShows: user
+      .data()
+      .favoriteTvShows.filter((tvShow) => tvShow !== tvShowId),
+    favoriteMovies: user.data().favoriteMovies,
+  };
+  await setDoc(userDoc, data);
+};
+
+export const deleteFavoriteMovie = (uid, movieId) => {
+  const userDoc = getUsersDoc(uid);
+  return setDoc(userDoc, {
+    favoriteTvShows: userDoc.data().favoriteTvShows,
+    favoriteMovies: userDoc
+      .data()
+      .favoriteMovies.filter((movie) => movie !== movieId),
+  });
+};
+
 export async function login(email, password) {
   try {
     return await appAuth
