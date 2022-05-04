@@ -46,6 +46,21 @@ export async function getUserInfo(uid) {
   return user.data();
 }
 
+const emptyUser = {
+  favoriteMovies: [],
+  favoriteTvShows: [],
+};
+
+export const resetUserInfo = (uid) => {
+  setDoc(getUsersDoc(uid), emptyUser);
+  return emptyUser;
+};
+
+export const updateUserInfo = async (uid, data) => {
+  const userDoc = getUsersDoc(uid);
+  await setDoc(userDoc, data);
+};
+
 export async function login(email, password) {
   try {
     return await appAuth
