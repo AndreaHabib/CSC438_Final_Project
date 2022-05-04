@@ -7,21 +7,38 @@ import {
 } from "firebase/auth";
 import { Link } from "react-router-dom";
 import "./login.css";
-import { loginInWithGoogle, getUserInfo } from "../../firebase-config";
+import {
+  loginInWithGoogle,
+  getUserInfo,
+  addNewDoc,
+  updateUserInfo,
+  resetUserInfo,
+  deleteFavoriteMovie,
+  deleteFavoriteTvShow,
+} from "../../firebase-config";
 
 function Login() {
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
   const [user, setUser] = useState({});
-
   const provider = new GoogleAuthProvider();
   const auth = getAuth();
+
   // sample code from firebase-config.js
-  //   useEffect(() => {
-  //     getUserInfo("QWFhKYtjK6UuqsRFt5YwrbtbShh2").then((data) => {
-  //       console.log(data);
-  //     });
-  //   }, []);
+  // useEffect(() => {
+  //   updateUserInfo("QWFhKYtjK6UuqsRFt5YwrbtbShh2", {
+  //     favoriteMovies: [12312],
+  //     favoriteTvShows: [1231],
+  //   });
+  // getUserInfo("QWFhKYtjK6UuqsRFt5YwrbtbShh2").then((data) => {
+  //   console.log(data);
+  // });
+  // resetUserInfo("QWFhKYtjK6UuqsRFt5YwrbtbShh2");
+  // deleteFavoriteTvShow("QWFhKYtjK6UuqsRFt5YwrbtbShh2", 1231);
+  // getUserInfo("QWFhKYtjK6UuqsRFt5YwrbtbShh2").then((data) => {
+  //   console.log(data);
+  // });
+  // }, []);
 
   const login = async () => {
     try {
