@@ -1,20 +1,12 @@
 import { initializeApp } from "firebase/app";
 import {
   getFirestore,
-  serverTimestamp,
   collection,
   doc,
   setDoc,
-  addDoc,
-  getDocs,
   getDoc,
 } from "firebase/firestore/lite";
-import {
-  getAuth,
-  signInWithPopup,
-  GoogleAuthProvider,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 // Cheng database
 // const firebaseConfig = {
@@ -40,28 +32,38 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-export const auth = getAuth(app);
+const appAuth = getAuth(app);
 
-export async function getUserInfo(uid) {
+const getUsersDoc = (uid) => {
   const usersCol = collection(db, "users");
   const userDoc = doc(usersCol, uid);
+  return userDoc;
+};
+
+export async function getUserInfo(uid) {
+  const userDoc = getUsersDoc(uid);
   const user = await getDoc(userDoc);
   return user.data();
 }
 
-async function userlogin(email, password) {
+export async function login(email, password) {
   try {
-    const user = await auth.signInWithEmailAndPassword(email, password);
-    return user;
+    return await appAuth
+      .signInWithEmailAndPassword(email, password)
+      .catch((error) => error.message);
   } catch (error) {
     console.log(error.message);
   }
 }
 
-async function userregister(email, password) {
+export async function register(email, password) {
   try {
-    const user = await auth.createUserWithEmailAndPassword(email, password);
-    return user;
+    return await appAuth
+      .createUserWithEmailAndPassword(email, password)
+      .then(async (user) => {
+        await setDoc(doc(db, "users", user.uid), emptyUser);
+      })
+      .catch((error) => error.message);
   } catch (error) {
     console.log(error.message);
   }
@@ -69,7 +71,7 @@ async function userregister(email, password) {
 
 export async function loginInWithGoogle() {
   const provider = new GoogleAuthProvider();
-  signInWithPopup(auth, provider)
+  signInWithPopup(appAuth, provider)
     .then((result) => {
       const credential = GoogleAuthProvider.credentialFromResult(result);
       const token = credential.accessToken;
@@ -88,6 +90,6 @@ export async function loginInWithGoogle() {
     });
 }
 
-async function signOut() {
-  await auth.signOut();
+export async function signOut() {
+  await appAuth.signOut();
 }
