@@ -32,7 +32,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const appAuth = getAuth(app);
+export const auth = getAuth(app);
 
 const getUsersDoc = (uid) => {
   const usersCol = collection(db, "users");
@@ -85,7 +85,7 @@ export const deleteFavoriteMovie = (uid, movieId) => {
 
 export async function login(email, password) {
   try {
-    return await appAuth
+    return await auth
       .signInWithEmailAndPassword(email, password)
       .catch((error) => error.message);
   } catch (error) {
@@ -95,7 +95,7 @@ export async function login(email, password) {
 
 export async function register(email, password) {
   try {
-    return await appAuth
+    return await auth
       .createUserWithEmailAndPassword(email, password)
       .then(async (user) => {
         await setDoc(doc(db, "users", user.uid), emptyUser);
@@ -108,7 +108,7 @@ export async function register(email, password) {
 
 export async function loginInWithGoogle() {
   const provider = new GoogleAuthProvider();
-  signInWithPopup(appAuth, provider)
+  signInWithPopup(auth, provider)
     .then((result) => {
       const credential = GoogleAuthProvider.credentialFromResult(result);
       const token = credential.accessToken;
@@ -128,5 +128,5 @@ export async function loginInWithGoogle() {
 }
 
 export async function signOut() {
-  await appAuth.signOut();
+  await auth.signOut();
 }
