@@ -1,29 +1,325 @@
-import {useState, React} from "react";
-import {auth} from "../../firebase-config";
-import {onAuthStateChanged, signOut} from "firebase/auth";
-import { Link } from "react-router-dom"
+import { useState, React, Fragment, useEffect } from "react";
+import { auth } from "../../firebase-config";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { Link, useNavigate } from "react-router-dom";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import MenuIcon from "@mui/icons-material/Menu";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  CircularProgress,
+} from "@mui/material";
 
 function Home() {
+  const navigate = useNavigate();
+  const [user, setUser] = useState({});
+  const [trending, setTrending] = useState([]);
+  const [popular, setPopular] = useState([]);
+  const [playingNow, setPlayingNow] = useState([]);
+  const [upcoming, setUpcoming] = useState([]);
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-    const [user, setUser] = useState({});
+  useEffect(() => {
+    getData();
+  }, []);
 
-    onAuthStateChanged(auth, (currentUser) => {
-        setUser(currentUser);
-    });
+  const getData = async (e) => {
+    setLoading(true);
 
-    const logout = async () => {
-        await signOut(auth);
-    };
+    const trendingURL = `https://api.themoviedb.org/3/trending/movie/week?api_key=${process.env.REACT_APP_API_KEY}`;
+    fetch(trendingURL)
+      .then((response) => response.json())
+      .then((json) => setTrending(json["results"]))
+      .catch((error) => setErrors({ ...errors, trending: error }));
 
-    return (
-        <div>
-                    <h1>{user?.email}</h1>
+    const popularURL = `https://api.themoviedb.org/3/movie/popular?api_key=5932b064e032c45eb55f4b0bc2b65dc8&language=en-US&page=1`;
+    fetch(popularURL)
+      .then((response) => response.json())
+      .then((json) => setPopular(json["results"]))
+      .catch((error) => setErrors({ ...errors, popular: error }));
 
-                    <button onClick={logout}><Link to="/"> Logout </Link> </button>
-               
-                
-        </div>
-    );
+    const playingNowURL = `https://api.themoviedb.org/3/movie/now_playing?api_key=5932b064e032c45eb55f4b0bc2b65dc8&language=en-US&region=US`;
+    fetch(playingNowURL)
+      .then((response) => response.json())
+      .then((json) => setPlayingNow(json["results"]))
+      .catch((error) => setErrors({ ...errors, playingNow: error }));
+
+    const upcomingURL = `https://api.themoviedb.org/3/movie/upcoming?api_key=5932b064e032c45eb55f4b0bc2b65dc8&language=en-US&region=US`;
+    fetch(upcomingURL)
+      .then((response) => response.json())
+      .then((json) => setUpcoming(json["results"]))
+      .catch((error) => setErrors({ ...errors, playingNow: error }));
+
+    setLoading(false);
+  };
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      setIsAuthenticated(true);
+      setUser(user);
+    } else {
+      setIsAuthenticated(false);
+      navigate("/login");
+    }
+  });
+
+  const logout = async () => {
+    await signOut(auth);
+  };
+
+  return (
+    <Fragment>
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar position="static">
+          <Toolbar>
+            <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              sx={{ mr: 2 }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              MyMovie
+            </Typography>
+            {isAuthenticated ? (
+              <Button color="inherit" onClick={logout}>
+                Logout
+              </Button>
+            ) : (
+              <Button component={Link} to="/" color="inherit">
+                Login
+              </Button>
+            )}
+          </Toolbar>
+        </AppBar>
+      </Box>
+      {loading ? (
+        <Dialog
+          open={loading}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{`Loading Movies...`}</DialogTitle>
+          <DialogContent
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <DialogContentText id="alert-dialog-description">
+              <CircularProgress />
+            </DialogContentText>
+          </DialogContent>
+        </Dialog>
+      ) : (
+        <Fragment>
+          <Box sx={{ flexGrow: 1, mt: 3 }}>
+            <Typography
+              textAlign="center"
+              variant="h6"
+              component="div"
+              sx={{
+                width: "15%",
+                borderRadius: "20px",
+                p: 1,
+                margin: "0 auto",
+                backgroundColor: "primary.light",
+                color: "white",
+              }}
+            >
+              Trending
+            </Typography>
+            <Box sx={{ width: "100%", display: "flex", overflowX: "scroll" }}>
+              {trending.map((movie) => (
+                <Box
+                  key={movie.id}
+                  sx={{
+                    width: "100%",
+                    m: 2,
+                    p: 1,
+                    borderRadius: "20px",
+                    backgroundColor: "white",
+                    "&:hover": {
+                      cursor: "pointer",
+                      boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.5)",
+                    },
+                  }}
+                  onClick={() => {
+                    window.location.href = `/movie/${movie.id}`;
+                  }}
+                >
+                  <img
+                    src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+                    alt={movie.title}
+                    style={{
+                      borderRadius: "20px",
+                      width: "200px",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                  />
+                </Box>
+              ))}
+            </Box>
+            <Typography
+              textAlign="center"
+              variant="h6"
+              component="div"
+              sx={{
+                width: "15%",
+                borderRadius: "20px",
+                p: 1,
+                margin: "0 auto",
+                backgroundColor: "primary.light",
+                color: "white",
+              }}
+            >
+              Upcoming
+            </Typography>
+            <Box sx={{ width: "100%", display: "flex", overflowX: "scroll" }}>
+              {upcoming.map((movie) => (
+                <Box
+                  key={movie.id}
+                  sx={{
+                    width: "100%",
+                    m: 2,
+                    p: 1,
+                    borderRadius: "20px",
+                    backgroundColor: "white",
+                    "&:hover": {
+                      cursor: "pointer",
+                      boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.5)",
+                    },
+                  }}
+                  onClick={() => {
+                    window.location.href = `/movie/${movie.id}`;
+                  }}
+                >
+                  <img
+                    src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+                    alt={movie.title}
+                    style={{
+                      borderRadius: "20px",
+                      width: "200px",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                  />
+                </Box>
+              ))}
+            </Box>
+            <Typography
+              textAlign="center"
+              variant="h6"
+              component="div"
+              sx={{
+                width: "15%",
+                borderRadius: "20px",
+                p: 1,
+                margin: "0 auto",
+                backgroundColor: "primary.light",
+                color: "white",
+              }}
+            >
+              Playing Now
+            </Typography>
+            <Box sx={{ width: "100%", display: "flex", overflowX: "scroll" }}>
+              {playingNow.map((movie) => (
+                <Box
+                  key={movie.id}
+                  sx={{
+                    width: "100%",
+                    m: 2,
+                    p: 1,
+                    borderRadius: "20px",
+                    backgroundColor: "white",
+                    "&:hover": {
+                      cursor: "pointer",
+                      boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.5)",
+                    },
+                  }}
+                  onClick={() => {
+                    window.location.href = `/movie/${movie.id}`;
+                  }}
+                >
+                  <img
+                    src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+                    alt={movie.title}
+                    style={{
+                      borderRadius: "20px",
+                      width: "200px",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                  />
+                </Box>
+              ))}
+            </Box>
+            <Typography
+              textAlign="center"
+              variant="h6"
+              component="div"
+              sx={{
+                width: "15%",
+                borderRadius: "20px",
+                p: 1,
+                margin: "0 auto",
+                backgroundColor: "primary.light",
+                color: "white",
+              }}
+            >
+              Popular
+            </Typography>
+            <Box sx={{ width: "100%", display: "flex", overflowX: "scroll" }}>
+              {popular.map((movie) => (
+                <Box
+                  key={movie.id}
+                  sx={{
+                    width: "100%",
+                    m: 2,
+                    p: 1,
+                    borderRadius: "20px",
+                    backgroundColor: "white",
+                    "&:hover": {
+                      cursor: "pointer",
+                      boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.5)",
+                    },
+                  }}
+                  onClick={() => {
+                    window.location.href = `/movie/${movie.id}`;
+                  }}
+                >
+                  <img
+                    src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+                    alt={movie.title}
+                    style={{
+                      borderRadius: "20px",
+                      width: "200px",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                  />
+                </Box>
+              ))}
+            </Box>
+          </Box>
+        </Fragment>
+      )}
+    </Fragment>
+  );
 }
 
 export default Home;

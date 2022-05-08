@@ -21,12 +21,12 @@ import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 // Leeran database
 const firebaseConfig = {
-  apiKey: "AIzaSyDc4xgDSlBHf5pCCud310bnY5Jv5Fh0yZs",
-  authDomain: "mymovie-8d5f9.firebaseapp.com",
-  projectId: "mymovie-8d5f9",
-  storageBucket: "mymovie-8d5f9.appspot.com",
-  messagingSenderId: "1503165230",
-  appId: "1:1503165230:web:9c9d3e937accb8c21b58bf",
+  apiKey: `${process.env.REACT_APP_FB_API_KEY}`,
+  authDomain: `${process.env.REACT_APP_AUTH_DOMAIN}`,
+  projectId: `${process.env.REACT_APP_PROJECT_ID}`,
+  storageBucket: `${process.env.REACT_APP_STORAGE_BUCKET}`,
+  messagingSenderId: `${process.env.REACT_APP_MESSAGING_SENDER_ID}`,
+  appId: `${process.env.REACT_APP_APP_ID}`,
 };
 
 const app = initializeApp(firebaseConfig);
