@@ -1,7 +1,8 @@
-import { useState, React, Fragment, useEffect } from "react";
+import { useState, React, Fragment, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import ApiClient from "../../api/ApiClient";
 import {
   Dialog,
   DialogTitle,
@@ -12,47 +13,62 @@ import {
 import NavBar from "../navbar/NavBar";
 
 function Home() {
-  const navigate = useNavigate();
   const [trending, setTrending] = useState([]);
   const [popular, setPopular] = useState([]);
   const [playingNow, setPlayingNow] = useState([]);
   const [upcoming, setUpcoming] = useState([]);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  const getData = useCallback(
+    (e) => {
+      setLoading(true);
+      const api = new ApiClient();
+      api
+        .getTrendingMovies()
+        .then((data) => setTrending(data))
+        .catch((error) =>
+          setErrors({
+            ...errors,
+            trending: error,
+          })
+        );
+      api
+        .getPopularMovies()
+        .then((data) => setPopular(data))
+        .catch((error) =>
+          setErrors({
+            ...errors,
+            popular: error,
+          })
+        );
+      api
+        .getPlayingNow()
+        .then((data) => setPlayingNow(data))
+        .catch((error) =>
+          setErrors({
+            ...errors,
+            playingNow: error,
+          })
+        );
+      api
+        .getUpcoming()
+        .then((data) => setUpcoming(data))
+        .catch((error) =>
+          setErrors({
+            ...errors,
+            upcoming: error,
+          })
+        );
+      setLoading(false);
+    },
+    [errors]
+  );
 
   useEffect(() => {
     getData();
-  }, []);
-
-  const getData = async (e) => {
-    setLoading(true);
-
-    const trendingURL = `https://api.themoviedb.org/3/trending/movie/week?api_key=${process.env.REACT_APP_API_KEY}`;
-    fetch(trendingURL)
-      .then((response) => response.json())
-      .then((json) => setTrending(json["results"]))
-      .catch((error) => setErrors({ ...errors, trending: error }));
-
-    const popularURL = `https://api.themoviedb.org/3/movie/popular?api_key=5932b064e032c45eb55f4b0bc2b65dc8&language=en-US&page=1`;
-    fetch(popularURL)
-      .then((response) => response.json())
-      .then((json) => setPopular(json["results"]))
-      .catch((error) => setErrors({ ...errors, popular: error }));
-
-    const playingNowURL = `https://api.themoviedb.org/3/movie/now_playing?api_key=5932b064e032c45eb55f4b0bc2b65dc8&language=en-US&region=US`;
-    fetch(playingNowURL)
-      .then((response) => response.json())
-      .then((json) => setPlayingNow(json["results"]))
-      .catch((error) => setErrors({ ...errors, playingNow: error }));
-
-    const upcomingURL = `https://api.themoviedb.org/3/movie/upcoming?api_key=5932b064e032c45eb55f4b0bc2b65dc8&language=en-US&region=US`;
-    fetch(upcomingURL)
-      .then((response) => response.json())
-      .then((json) => setUpcoming(json["results"]))
-      .catch((error) => setErrors({ ...errors, playingNow: error }));
-
-    setLoading(false);
-  };
+  }, [getData]);
 
   return (
     <Fragment>

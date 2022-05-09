@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import { auth } from "../../firebase-config";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import AppBar from "@mui/material/AppBar";
@@ -42,9 +42,19 @@ export default function NavBar() {
             MyMovie
           </Typography>
           {isAuthenticated ? (
-            <Button color="inherit" onClick={logout}>
-              Logout
-            </Button>
+            <Fragment>
+              <Button color="inherit" onClick={logout}>
+                Logout
+              </Button>
+              <Button
+                color="inherit"
+                onClick={() => {
+                  navigate("/home");
+                }}
+              >
+                Home
+              </Button>
+            </Fragment>
           ) : (
             <Button component={Link} to="/" color="inherit">
               Login

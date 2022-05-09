@@ -6,7 +6,13 @@ import {
   setDoc,
   getDoc,
 } from "firebase/firestore/lite";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import {
+  getAuth,
+  signInWithPopup,
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
 
 // Cheng database
 // const firebaseConfig = {
@@ -29,7 +35,7 @@ const firebaseConfig = {
   appId: `${process.env.REACT_APP_APP_ID}`,
 };
 
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 export const auth = getAuth(app);
@@ -83,32 +89,25 @@ export const deleteFavoriteMovie = (uid, movieId) => {
   });
 };
 
-export async function login(email, password) {
-  try {
-    return await auth
-      .signInWithEmailAndPassword(email, password)
-      .catch((error) => error.message);
-  } catch (error) {
-    console.log(error.message);
-  }
+export function login(email, password) {
+  return signInWithEmailAndPassword(auth, email, password)
+    .then((user) => user)
+    .catch((error) => error);
 }
 
-export async function register(email, password) {
-  try {
-    return await auth
-      .createUserWithEmailAndPassword(email, password)
-      .then(async (user) => {
-        await setDoc(doc(db, "users", user.uid), emptyUser);
-      })
-      .catch((error) => error.message);
-  } catch (error) {
-    console.log(error.message);
-  }
+export function register(email, password) {
+  return createUserWithEmailAndPassword(auth, email, password)
+    .then(async (user) => {
+      console.log("user", user.user.uid);
+      await setDoc(doc(db, "users", user.user.uid), emptyUser);
+      return user;
+    })
+    .catch((error) => error.message);
 }
 
 export async function loginInWithGoogle() {
   const provider = new GoogleAuthProvider();
-  signInWithPopup(auth, provider)
+  return signInWithPopup(auth, provider)
     .then((result) => {
       const credential = GoogleAuthProvider.credentialFromResult(result);
       const token = credential.accessToken;

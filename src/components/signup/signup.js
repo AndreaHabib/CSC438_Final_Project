@@ -1,6 +1,6 @@
 import { useState, React, Fragment } from "react";
-import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 import { onAuthStateChanged } from "firebase/auth";
+import { auth, register } from "../../firebase-config";
 import { useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -24,7 +24,6 @@ function Signup() {
   });
   const [errors, setErrors] = useState({});
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const auth = getAuth();
   const [loading, setLoading] = useState(false);
 
   onAuthStateChanged(auth, (user) => {
@@ -36,21 +35,6 @@ function Signup() {
     }
   });
 
-  // sample code from firebase-config.js
-  // useEffect(() => {
-  //   updateUserInfo("QWFhKYtjK6UuqsRFt5YwrbtbShh2", {
-  //     favoriteMovies: [12312],
-  //     favoriteTvShows: [1231],
-  //   });
-  // getUserInfo("QWFhKYtjK6UuqsRFt5YwrbtbShh2").then((data) => {
-  //   console.log(data);
-  // });
-  // resetUserInfo("QWFhKYtjK6UuqsRFt5YwrbtbShh2");
-  // deleteFavoriteTvShow("QWFhKYtjK6UuqsRFt5YwrbtbShh2", 1231);
-  // getUserInfo("QWFhKYtjK6UuqsRFt5YwrbtbShh2").then((data) => {
-  //   console.log(data);
-  // });
-  // }, []);
   const handleEmail = (event) => {
     setInputs({ ...inputs, email: event.target.value });
   };
@@ -59,16 +43,14 @@ function Signup() {
     setInputs({ ...inputs, password: event.target.value });
   };
 
-  const authenticate = () => {
+  const authenticate = async () => {
     setLoading(true);
-    createUserWithEmailAndPassword(auth, inputs.email, inputs.password)
-      // eslint-disable-next-line
-      .then((userCredential) => {
+    await register(inputs.email, inputs.password)
+      .then((user) => {
         setErrors({});
         setIsAuthenticated(true);
       })
       .catch((error) => {
-        // Handle Errors here.
         setIsAuthenticated(false);
         const errorCode = error.code;
         const errorMessage = error.message;
