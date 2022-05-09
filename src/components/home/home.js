@@ -1,4 +1,4 @@
-import { useState, React, Fragment, useEffect } from "react";
+import { useState, React, Fragment, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -20,51 +20,55 @@ function Home() {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+
+  const getData = useCallback(
+    (e) => {
+      setLoading(true);
+      const api = new ApiClient();
+      api
+        .getTrendingMovies()
+        .then((data) => setTrending(data))
+        .catch((error) =>
+          setErrors({
+            ...errors,
+            trending: error,
+          })
+        );
+      api
+        .getPopularMovies()
+        .then((data) => setPopular(data))
+        .catch((error) =>
+          setErrors({
+            ...errors,
+            popular: error,
+          })
+        );
+      api
+        .getPlayingNow()
+        .then((data) => setPlayingNow(data))
+        .catch((error) =>
+          setErrors({
+            ...errors,
+            playingNow: error,
+          })
+        );
+      api
+        .getUpcoming()
+        .then((data) => setUpcoming(data))
+        .catch((error) =>
+          setErrors({
+            ...errors,
+            upcoming: error,
+          })
+        );
+      setLoading(false);
+    },
+    [errors]
+  );
+
   useEffect(() => {
     getData();
-  }, []);
-
-  const getData = (e) => {
-    setLoading(true);
-    const api = new ApiClient();
-    api
-      .getTrendingMovies()
-      .then((data) => setTrending(data))
-      .catch((error) =>
-        setErrors({
-          ...errors,
-          trending: error,
-        })
-      );
-    api
-      .getPopularMovies()
-      .then((data) => setPopular(data))
-      .catch((error) =>
-        setErrors({
-          ...errors,
-          popular: error,
-        })
-      );
-    api
-      .getPlayingNow()
-      .then((data) => setPlayingNow(data))
-      .catch((error) =>
-        setErrors({
-          ...errors,
-          playingNow: error,
-        })
-      );
-    api
-      .getUpcoming()
-      .then((data) => setUpcoming(data))
-      .catch((error) =>
-        setErrors({
-          ...errors,
-          upcoming: error,
-        })
-      );
-    setLoading(false);
-  };
+  }, [getData]);
 
   return (
     <Fragment>

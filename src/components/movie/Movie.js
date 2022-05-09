@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useCallback } from "react";
 import { useState, useEffect } from "react";
 import { Box, Grid, Typography, Avatar, Button } from "@mui/material";
 import { useParams } from "react-router-dom";
@@ -15,19 +15,22 @@ export default function Movie() {
   const [movie, setMovie] = useState([]);
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
-  useEffect(() => {
+  const fetchMovie = useCallback(async () => {
     setLoading(true);
-    fetch(
+    await fetch(
       `https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`
     )
       .then((res) => res.json())
       .then((data) => {
         setMovie(data);
-        console.log(data);
       })
       .catch((err) => console.log(err));
     setLoading(false);
-  }, []);
+  }, [id]);
+  useEffect(() => {
+    fetchMovie();
+  }, [fetchMovie]);
+
   return (
     <Fragment>
       <NavBar />
