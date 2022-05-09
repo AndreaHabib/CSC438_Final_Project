@@ -1,14 +1,7 @@
 import { useState, React, Fragment, useEffect } from "react";
-import { auth } from "../../firebase-config";
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import { Link, useNavigate } from "react-router-dom";
-import AppBar from "@mui/material/AppBar";
+import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
 import {
   Dialog,
   DialogTitle,
@@ -16,17 +9,16 @@ import {
   DialogContentText,
   CircularProgress,
 } from "@mui/material";
+import NavBar from "../navbar/NavBar";
 
 function Home() {
   const navigate = useNavigate();
-  const [user, setUser] = useState({});
   const [trending, setTrending] = useState([]);
   const [popular, setPopular] = useState([]);
   const [playingNow, setPlayingNow] = useState([]);
   const [upcoming, setUpcoming] = useState([]);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     getData();
@@ -62,49 +54,9 @@ function Home() {
     setLoading(false);
   };
 
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      setIsAuthenticated(true);
-      setUser(user);
-    } else {
-      setIsAuthenticated(false);
-      navigate("/login");
-    }
-  });
-
-  const logout = async () => {
-    await signOut(auth);
-  };
-
   return (
     <Fragment>
-      <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static">
-          <Toolbar>
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              sx={{ mr: 2 }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              MyMovie
-            </Typography>
-            {isAuthenticated ? (
-              <Button color="inherit" onClick={logout}>
-                Logout
-              </Button>
-            ) : (
-              <Button component={Link} to="/" color="inherit">
-                Login
-              </Button>
-            )}
-          </Toolbar>
-        </AppBar>
-      </Box>
+      <NavBar />
       {loading ? (
         <Dialog
           open={loading}
@@ -132,7 +84,7 @@ function Home() {
               variant="h6"
               component="div"
               sx={{
-                width: "15%",
+                width: "30%",
                 borderRadius: "20px",
                 p: 1,
                 margin: "0 auto",
@@ -158,7 +110,7 @@ function Home() {
                     },
                   }}
                   onClick={() => {
-                    window.location.href = `/movie/${movie.id}`;
+                    navigate(`/movie/${movie.id}`);
                   }}
                 >
                   <img
@@ -179,7 +131,7 @@ function Home() {
               variant="h6"
               component="div"
               sx={{
-                width: "15%",
+                width: "30%",
                 borderRadius: "20px",
                 p: 1,
                 margin: "0 auto",
@@ -205,7 +157,7 @@ function Home() {
                     },
                   }}
                   onClick={() => {
-                    window.location.href = `/movie/${movie.id}`;
+                    navigate(`/movie/${movie.id}`);
                   }}
                 >
                   <img
@@ -226,7 +178,7 @@ function Home() {
               variant="h6"
               component="div"
               sx={{
-                width: "15%",
+                width: "30%",
                 borderRadius: "20px",
                 p: 1,
                 margin: "0 auto",
@@ -252,7 +204,7 @@ function Home() {
                     },
                   }}
                   onClick={() => {
-                    window.location.href = `/movie/${movie.id}`;
+                    navigate(`/movie/${movie.id}`);
                   }}
                 >
                   <img
@@ -273,7 +225,7 @@ function Home() {
               variant="h6"
               component="div"
               sx={{
-                width: "15%",
+                width: "30%",
                 borderRadius: "20px",
                 p: 1,
                 margin: "0 auto",
@@ -299,7 +251,7 @@ function Home() {
                     },
                   }}
                   onClick={() => {
-                    window.location.href = `/movie/${movie.id}`;
+                    navigate(`/movie/${movie.id}`);
                   }}
                 >
                   <img
