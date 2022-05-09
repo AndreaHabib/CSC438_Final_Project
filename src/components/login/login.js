@@ -1,13 +1,8 @@
 import { useState, React, Fragment } from "react";
-import {
-  signInWithEmailAndPassword,
-  getAuth,
-  GoogleAuthProvider,
-  onAuthStateChanged,
-} from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import "./login.css";
-import { loginInWithGoogle } from "../../firebase-config";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth, login, loginInWithGoogle } from "../../firebase-config";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -31,7 +26,6 @@ function Login() {
   });
   const [errors, setErrors] = useState({});
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const auth = getAuth();
   const [loading, setLoading] = useState(false);
 
   onAuthStateChanged(auth, (user) => {
@@ -43,21 +37,6 @@ function Login() {
     }
   });
 
-  // sample code from firebase-config.js
-  // useEffect(() => {
-  //   updateUserInfo("QWFhKYtjK6UuqsRFt5YwrbtbShh2", {
-  //     favoriteMovies: [12312],
-  //     favoriteTvShows: [1231],
-  //   });
-  // getUserInfo("QWFhKYtjK6UuqsRFt5YwrbtbShh2").then((data) => {
-  //   console.log(data);
-  // });
-  // resetUserInfo("QWFhKYtjK6UuqsRFt5YwrbtbShh2");
-  // deleteFavoriteTvShow("QWFhKYtjK6UuqsRFt5YwrbtbShh2", 1231);
-  // getUserInfo("QWFhKYtjK6UuqsRFt5YwrbtbShh2").then((data) => {
-  //   console.log(data);
-  // });
-  // }, []);
   const handleEmail = (event) => {
     setInputs({ ...inputs, email: event.target.value });
   };
@@ -66,29 +45,22 @@ function Login() {
     setInputs({ ...inputs, password: event.target.value });
   };
 
-  const authenticate = () => {
+  const authenticate = async () => {
     setLoading(true);
-    signInWithEmailAndPassword(auth, inputs.email, inputs.password)
-      // eslint-disable-next-line
-      .then((userCredential) => {
+    await login(inputs.email, inputs.password)
+      .then((user) => {
         setErrors({});
-        setIsAuthenticated(true);
+        if (user) {
+          setIsAuthenticated(true);
+        }
       })
       .catch((error) => {
-        // Handle Errors here.
-        setIsAuthenticated(false);
-        const errorCode = error.code;
-        const errorMessage = error.message;
         setErrors({
-          errorCode: errorCode,
-          errorMessage: errorMessage,
+          errorMessage: error.message,
+          errorCode: error.code,
         });
       });
     setLoading(false);
-
-    if (isAuthenticated) {
-      navigate("/home");
-    }
   };
 
   return (
