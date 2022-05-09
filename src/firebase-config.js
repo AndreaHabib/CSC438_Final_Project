@@ -107,7 +107,7 @@ export function register(email, password) {
 
 export async function loginInWithGoogle() {
   const provider = new GoogleAuthProvider();
-  signInWithPopup(auth, provider)
+  return signInWithPopup(auth, provider)
     .then((result) => {
       const credential = GoogleAuthProvider.credentialFromResult(result);
       const token = credential.accessToken;
