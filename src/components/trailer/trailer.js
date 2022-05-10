@@ -60,7 +60,7 @@ export default function Trailer() {
 
 
                 <div className="video">
-                    <iframe width="680" height="500"
+                    <iframe width="100%"
                         src={`https://www.youtube.com/embed/` + key}>
                     </iframe>
                 </div>
