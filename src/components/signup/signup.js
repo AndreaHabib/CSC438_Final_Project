@@ -1,4 +1,4 @@
-import { useState, React, Fragment } from "react";
+import { useState, React } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, register } from "../../firebase-config";
 import { useNavigate } from "react-router-dom";
@@ -14,6 +14,8 @@ import {
   Alert,
   CircularProgress,
 } from "@mui/material";
+import { ThemeProvider } from "@mui/material/styles";
+import theme from "../../Styles";
 
 function Signup() {
   const navigate = useNavigate();
@@ -75,7 +77,8 @@ function Signup() {
   };
 
   return (
-    <Fragment>
+    <ThemeProvider theme={theme}>
+      {" "}
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static">
           <Toolbar>
@@ -85,7 +88,6 @@ function Signup() {
           </Toolbar>
         </AppBar>
       </Box>
-
       {isAuthenticated === false ? (
         <Box sx={{ padding: "80px" }} component="form">
           <FormGroup className="form">
@@ -147,7 +149,7 @@ function Signup() {
           </Box>
         </Box>
       ) : undefined}
-    </Fragment>
+    </ThemeProvider>
   );
 }
 

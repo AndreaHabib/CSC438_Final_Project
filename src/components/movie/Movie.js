@@ -1,4 +1,4 @@
-import React, { Fragment, useCallback } from "react";
+import React, { useCallback } from "react";
 import { useState, useEffect } from "react";
 import { Box, Grid, Typography, Avatar, Button } from "@mui/material";
 import { useParams } from "react-router-dom";
@@ -9,14 +9,13 @@ import {
   DialogContent,
   DialogContentText,
   CircularProgress,
+  Divider,
 } from "@mui/material";
-
+import { ThemeProvider } from "@mui/material/styles";
+import theme from "../../Styles";
+import { addFavoriteMovie } from "../../firebase-config";
 
 export default function Movie() {
-  
-  
-
-
   const [movie, setMovie] = useState([]);
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
@@ -37,9 +36,8 @@ export default function Movie() {
   }, [fetchMovie]);
 
   return (
-    <Fragment>
+    <ThemeProvider theme={theme}>
       <NavBar />
-      
 
       {loading ? (
         <Dialog
@@ -105,20 +103,33 @@ export default function Movie() {
               md={8}
               lg={8}
             >
-              <Typography textAlign="center" variant="h4">
+              <Typography
+                textAlign="center"
+                variant="h6"
+                sx={{ fontWeight: "bold" }}
+              >
                 {movie.title}
+                <Divider />
               </Typography>
-              <Typography textAlign="center" variant="h6">
+              <Typography textAlign="center" variant="h10">
                 {movie.tagline}
               </Typography>
-              <Typography mt={1} mb={1} textAlign="center" variant="h6">
+              <Typography mt={1} mb={1} textAlign="center" variant="h">
                 {movie.overview}
               </Typography>
-              <Typography mt={1} mb={2} textAlign="center" variant="h6">
+              <Typography
+                mt={1}
+                mb={2}
+                textAlign="center"
+                variant="h6"
+                sx={{ fontWeight: "bold" }}
+              >
                 Release Date: {movie.release_date}
               </Typography>
-              <Button variant="contained"> Add to Favorites</Button>
-      
+              <Button onClick={addFavoriteMovie} variant="contained">
+                {" "}
+                Add to Favorites
+              </Button>
             </Grid>
           </Grid>
           <Box sx={{ flexGrow: 1, mt: 1 }}>
@@ -156,9 +167,10 @@ export default function Movie() {
                   md={4}
                   lg={4}
                 >
-                  <Typography variant="h6">
-                    Runtime: {movie.runtime} mins
+                  <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                    Runtime:
                   </Typography>
+                  <Typography variant="h6">: {movie.runtime} mins</Typography>
                 </Grid>
                 <Grid
                   sx={{ display: "flex", justifyContent: "center" }}
@@ -168,19 +180,10 @@ export default function Movie() {
                   md={4}
                   lg={4}
                 >
-                  <Typography variant="h6">Budget: ${movie.budget}</Typography>
-                </Grid>
-                <Grid
-                  sx={{ display: "flex", justifyContent: "center" }}
-                  item
-                  xs={12}
-                  sm={4}
-                  md={4}
-                  lg={4}
-                >
-                  <Typography variant="h6">
-                    Revenue: ${movie.revenue}
+                  <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                    Budget:
                   </Typography>
+                  <Typography variant="h6"> ${movie.budget}</Typography>
                 </Grid>
                 <Grid
                   sx={{ display: "flex", justifyContent: "center" }}
@@ -190,9 +193,10 @@ export default function Movie() {
                   md={4}
                   lg={4}
                 >
-                  <Typography variant="h6">
-                    Ratings: {movie.vote_average}/10
+                  <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                    Revenue:
                   </Typography>
+                  <Typography variant="h6">${movie.revenue}</Typography>
                 </Grid>
                 <Grid
                   sx={{ display: "flex", justifyContent: "center" }}
@@ -202,8 +206,24 @@ export default function Movie() {
                   md={4}
                   lg={4}
                 >
+                  <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                    Ratings:
+                  </Typography>
+                  <Typography variant="h6">{movie.vote_average}/10</Typography>
+                </Grid>
+                <Grid
+                  sx={{ display: "flex", justifyContent: "center" }}
+                  item
+                  xs={12}
+                  sm={4}
+                  md={4}
+                  lg={4}
+                >
+                  <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                    Genres:
+                  </Typography>
                   <Typography variant="h6">
-                    Genres: {movie.genres.map((genre) => genre.name + " ")}
+                    {movie.genres.map((genre) => genre.name + " ")}
                   </Typography>
                 </Grid>
               </Grid>
@@ -211,6 +231,6 @@ export default function Movie() {
           </Box>
         </Box>
       )}
-    </Fragment>
+    </ThemeProvider>
   );
 }

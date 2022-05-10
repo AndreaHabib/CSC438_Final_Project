@@ -57,7 +57,14 @@ export default function NavBar() {
               >
                 Home
               </Button>
-
+              <Button
+                color="inherit"
+                onClick={() => {
+                  navigate("/Fav");
+                }}
+              >
+                Favorites
+              </Button>
 
             </Fragment>
           ) : (

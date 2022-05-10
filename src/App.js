@@ -6,11 +6,13 @@ import Login from "./components/login/Login";
 import Hero from "./components/hero/Hero";
 import Movie from "./components/movie/Movie";
 // import { Route, Routes } from 'react-router-dom';
+import Fav from "./components/Fav/Fav";
 
 function App() {
   return (
     <Router>
       <Routes>
+        <Route exact path="/fav" element={<Fav />} />
         <Route exact path="/login" element={<Login />} />
         <Route exact path="/signup" element={<Signup />} />
         <Route exact path="/home" element={<Home />} />

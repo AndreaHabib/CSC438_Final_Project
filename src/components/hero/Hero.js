@@ -3,6 +3,8 @@ import { Box, Typography, Button, Stack } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../firebase-config";
+import {ThemeProvider} from "@mui/material/styles";
+import theme from "../../Styles";
 
 export default function Hero() {
   const navigate = useNavigate();
@@ -14,6 +16,7 @@ export default function Hero() {
     }
   });
   return (
+    <ThemeProvider theme={theme}>
     <Box
       sx={{
         width: "100vw",
@@ -28,7 +31,7 @@ export default function Hero() {
       <Typography textAlign="center" variant="h4" sx={{ color: "white" }}>
         Ready to enter a world of endless movies?
       </Typography>
-      <Typography variant="h5" sx={{ color: "white" }}>
+      <Typography textAlign="center" variant="h5" sx={{ color: "white" }}>
         Get started today with MyMovie!
       </Typography>
       <Stack flexDirection="row" sx={{ mt: 2 }}>
@@ -51,5 +54,6 @@ export default function Hero() {
         </Button>
       </Stack>
     </Box>
+    </ThemeProvider>
   );
 }

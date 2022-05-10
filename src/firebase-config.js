@@ -123,9 +123,22 @@ export async function loginInWithGoogle() {
       console.log(email);
       const credential = GoogleAuthProvider.credentialFromError(error);
       console.log(credential);
+
+      console.log (process.env.FB_API_KEY);
     });
 }
 
 export async function signOut() {
   await auth.signOut();
 }
+
+export const addFavoriteMovie = async (uid, movieId) => {
+  const userDoc = getUsersDoc(uid);
+  const user = await getDoc(userDoc);
+  const { favoriteMovies, favoriteTvShows } = user.data();
+  const newFavoriteMovies = [...favoriteMovies, movieId];
+  await updateUserInfo(uid, {
+    favoriteMovies: newFavoriteMovies,
+    favoriteTvShows,
+  });
+};

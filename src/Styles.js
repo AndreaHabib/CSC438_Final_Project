@@ -13,8 +13,9 @@ const theme = createTheme({
             main: Colors.primary},
             secondary: {
                 main: Colors.secondary},
-            background:{main:Colors.primary}}
-    ,
-            })
+            background:{main:Colors.primary}},
+    typography: {
+        fontFamily: "Roboto Mono"
+            }});
 
 export default theme;

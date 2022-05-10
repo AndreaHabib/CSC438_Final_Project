@@ -11,6 +11,8 @@ import {
   CircularProgress,
 } from "@mui/material";
 import NavBar from "../navbar/NavBar";
+import {ThemeProvider} from "@mui/material/styles";
+import theme from "../../Styles";
 
 function Home() {
   const [trending, setTrending] = useState([]);
@@ -71,7 +73,7 @@ function Home() {
   }, [getData]);
 
   return (
-    <Fragment>
+    <ThemeProvider theme={theme}>
       <NavBar />
       {loading ? (
         <Dialog
@@ -286,7 +288,7 @@ function Home() {
           </Box>
         </Fragment>
       )}
-    </Fragment>
+      </ThemeProvider>
   );
 }
 
