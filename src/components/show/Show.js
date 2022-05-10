@@ -11,25 +11,26 @@ import {
   CircularProgress,
 } from "@mui/material";
 
-export default function Movie() {
-  const [movie, setMovie] = useState([]);
+export default function Show() {
+  const [show, setShow] = useState([]);
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
-  const fetchMovie = useCallback(async () => {
+  const fetchShow = useCallback(async () => {
     setLoading(true);
     await fetch(
-      `https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`
+      `https://api.themoviedb.org/3/tv/${id}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`
     )
       .then((res) => res.json())
       .then((data) => {
-        setMovie(data);
+        console.log(data);
+        setShow(data);
       })
       .catch((err) => console.log(err));
     setLoading(false);
   }, [id]);
   useEffect(() => {
-    fetchMovie();
-  }, [fetchMovie]);
+    fetchShow();
+  }, [fetchShow]);
 
   return (
     <Fragment>
@@ -83,7 +84,7 @@ export default function Movie() {
                   height: "16rem",
                   border: "2px solid white",
                 }}
-                src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+                src={`https://image.tmdb.org/t/p/w500/${show.poster_path}`}
               />
             </Grid>
             <Grid
@@ -100,16 +101,16 @@ export default function Movie() {
               lg={8}
             >
               <Typography textAlign="center" variant="h4">
-                {movie.title}
+                {show.title}
               </Typography>
               <Typography textAlign="center" variant="h6">
-                {movie.tagline}
+                {show.tagline}
               </Typography>
               <Typography mt={1} mb={1} textAlign="center" variant="h6">
-                {movie.overview}
+                {show.overview}
               </Typography>
               <Typography mt={1} mb={2} textAlign="center" variant="h6">
-                Release Date: {movie.release_date}
+                Release Date: {show.release_date}
               </Typography>
               <Button variant="contained"> Add to Favorites</Button>
             </Grid>
@@ -150,29 +151,7 @@ export default function Movie() {
                   lg={4}
                 >
                   <Typography variant="h6">
-                    Runtime: {movie.runtime} mins
-                  </Typography>
-                </Grid>
-                <Grid
-                  sx={{ display: "flex", justifyContent: "center" }}
-                  item
-                  xs={12}
-                  sm={4}
-                  md={4}
-                  lg={4}
-                >
-                  <Typography variant="h6">Budget: ${movie.budget}</Typography>
-                </Grid>
-                <Grid
-                  sx={{ display: "flex", justifyContent: "center" }}
-                  item
-                  xs={12}
-                  sm={4}
-                  md={4}
-                  lg={4}
-                >
-                  <Typography variant="h6">
-                    Revenue: ${movie.revenue}
+                    Episode Runtime: {show.episode_run_time[0]} mins
                   </Typography>
                 </Grid>
                 <Grid
@@ -184,7 +163,7 @@ export default function Movie() {
                   lg={4}
                 >
                   <Typography variant="h6">
-                    Ratings: {movie.vote_average}/10
+                    #Episodes {show.number_of_episodes}
                   </Typography>
                 </Grid>
                 <Grid
@@ -196,7 +175,31 @@ export default function Movie() {
                   lg={4}
                 >
                   <Typography variant="h6">
-                    Genres: {movie.genres.map((genre) => genre.name + " ")}
+                    #Seasons {show.number_of_seasons}
+                  </Typography>
+                </Grid>
+                <Grid
+                  sx={{ display: "flex", justifyContent: "center" }}
+                  item
+                  xs={12}
+                  sm={4}
+                  md={4}
+                  lg={4}
+                >
+                  <Typography variant="h6">
+                    Ratings: {show.vote_average}/10
+                  </Typography>
+                </Grid>
+                <Grid
+                  sx={{ display: "flex", justifyContent: "center" }}
+                  item
+                  xs={12}
+                  sm={4}
+                  md={4}
+                  lg={4}
+                >
+                  <Typography textAlign="center" variant="h6">
+                    Genres: {show.genres.map((genre) => genre.name + " ")}
                   </Typography>
                 </Grid>
               </Grid>

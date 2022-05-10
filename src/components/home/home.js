@@ -17,6 +17,7 @@ function Home() {
   const [popular, setPopular] = useState([]);
   const [playingNow, setPlayingNow] = useState([]);
   const [upcoming, setUpcoming] = useState([]);
+  const [tvShow, setTvShow] = useState([]);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -59,6 +60,15 @@ function Home() {
           setErrors({
             ...errors,
             upcoming: error,
+          })
+        );
+      api
+        .getTrendingTvShows()
+        .then((data) => setTvShow(data))
+        .catch((error) =>
+          setErrors({
+            ...errors,
+            tvShow: error,
           })
         );
       setLoading(false);
@@ -132,6 +142,53 @@ function Home() {
                   <img
                     src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
                     alt={movie.title}
+                    style={{
+                      borderRadius: "20px",
+                      width: "200px",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                  />
+                </Box>
+              ))}
+            </Box>
+            <Typography
+              textAlign="center"
+              variant="h6"
+              component="div"
+              sx={{
+                width: "30%",
+                borderRadius: "20px",
+                p: 1,
+                margin: "0 auto",
+                backgroundColor: "primary.light",
+                color: "white",
+              }}
+            >
+              Trending Shows
+            </Typography>
+            <Box sx={{ width: "100%", display: "flex", overflowX: "scroll" }}>
+              {tvShow.map((show) => (
+                <Box
+                  key={show.id}
+                  sx={{
+                    width: "100%",
+                    m: 2,
+                    p: 1,
+                    borderRadius: "20px",
+                    backgroundColor: "white",
+                    "&:hover": {
+                      cursor: "pointer",
+                      boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.5)",
+                    },
+                  }}
+                  onClick={() => {
+                    navigate(`/show/${show.id}`);
+                  }}
+                >
+                  <img
+                    src={`https://image.tmdb.org/t/p/w500/${show.poster_path}`}
+                    alt={show.title}
                     style={{
                       borderRadius: "20px",
                       width: "200px",
