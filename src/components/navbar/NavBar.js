@@ -65,6 +65,14 @@ export default function NavBar() {
                 >
                   Favorites
                 </Button>
+                <Button
+                  color="inherit"
+                  onClick={() => {
+                    navigate("/trailer");
+                  }}
+                >
+                  Trailer
+                </Button>
               </Fragment>
             ) : (
               <Button component={Link} to="/" color="inherit">
