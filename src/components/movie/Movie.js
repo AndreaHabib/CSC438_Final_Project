@@ -11,7 +11,12 @@ import {
   CircularProgress,
 } from "@mui/material";
 
+
 export default function Movie() {
+  
+  
+
+
   const [movie, setMovie] = useState([]);
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
@@ -34,6 +39,8 @@ export default function Movie() {
   return (
     <Fragment>
       <NavBar />
+      
+
       {loading ? (
         <Dialog
           open={loading}
@@ -110,7 +117,8 @@ export default function Movie() {
               <Typography mt={1} mb={2} textAlign="center" variant="h6">
                 Release Date: {movie.release_date}
               </Typography>
-              <Button variant="contained">Add to Favorites</Button>
+              <Button variant="contained"> Add to Favorites</Button>
+      
             </Grid>
           </Grid>
           <Box sx={{ flexGrow: 1, mt: 1 }}>

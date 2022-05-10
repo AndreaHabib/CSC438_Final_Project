@@ -1,6 +1,5 @@
 import { useState, React, Fragment } from "react";
 import { useNavigate } from "react-router-dom";
-import "./login.css";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, login, loginInWithGoogle } from "../../firebase-config";
 import AppBar from "@mui/material/AppBar";

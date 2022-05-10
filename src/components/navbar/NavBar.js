@@ -9,6 +9,8 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useNavigate, Link } from "react-router-dom";
+import {ThemeProvider} from "@mui/material/styles";
+import theme from "../../Styles";
 
 export default function NavBar() {
   const navigate = useNavigate();
@@ -26,6 +28,7 @@ export default function NavBar() {
     await signOut(auth);
   };
   return (
+    <ThemeProvider theme={theme}>
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
@@ -54,6 +57,8 @@ export default function NavBar() {
               >
                 Home
               </Button>
+
+
             </Fragment>
           ) : (
             <Button component={Link} to="/" color="inherit">
@@ -63,5 +68,6 @@ export default function NavBar() {
         </Toolbar>
       </AppBar>
     </Box>
+    </ThemeProvider>
   );
 }
