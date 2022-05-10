@@ -3,7 +3,6 @@ import { getUserInfo } from "../../firebase-config";
 import { Typography, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../navbar/NavBar";
-import ApiClient from "../../api/ApiClient";
 
 const Favorites = () => {
   const [userInfo, setUserInfo] = useState({
@@ -109,9 +108,9 @@ const Favorites = () => {
         Favorite TV Shows
       </Typography>
       <Box sx={{ width: "100%", display: "flex", overflowX: "scroll" }}>
-        {userInfo.favoriteTvShows.map((movie) => (
+        {userInfo.favoriteTvShows.map((show) => (
           <Box
-            key={movie.id}
+            key={show.id}
             sx={{
               width: "100%",
               m: 2,
@@ -124,12 +123,12 @@ const Favorites = () => {
               },
             }}
             onClick={() => {
-              navigate(`/movie/${movie.id}`);
+              navigate(`/show/${show.id}`);
             }}
           >
             <img
-              src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
-              alt={movie.title}
+              src={`https://image.tmdb.org/t/p/w500/${show.poster_path}`}
+              alt={show.title}
               style={{
                 borderRadius: "20px",
                 width: "200px",

@@ -10,6 +10,7 @@ import {
   DialogContentText,
   CircularProgress,
 } from "@mui/material";
+import { addFavoriteTvShow } from "../../firebase-config";
 
 export default function Show() {
   const [show, setShow] = useState([]);
@@ -22,7 +23,6 @@ export default function Show() {
     )
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setShow(data);
       })
       .catch((err) => console.log(err));
@@ -112,7 +112,13 @@ export default function Show() {
               <Typography mt={1} mb={2} textAlign="center" variant="h6">
                 Release Date: {show.release_date}
               </Typography>
-              <Button variant="contained"> Add to Favorites</Button>
+              <Button
+                onClick={() => addFavoriteTvShow(show.id)}
+                variant="contained"
+              >
+                {" "}
+                Add to Favorites
+              </Button>
             </Grid>
           </Grid>
           <Box sx={{ flexGrow: 1, mt: 1 }}>
