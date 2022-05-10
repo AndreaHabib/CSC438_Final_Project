@@ -107,7 +107,7 @@ function Home() {
                 p: 1,
                 margin: "0 auto",
                 backgroundColor: "primary.light",
-                color: "white",
+                color: "white"
               }}
             >
               Trending
