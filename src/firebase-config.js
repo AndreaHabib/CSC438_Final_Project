@@ -114,8 +114,8 @@ export function login(email, password) {
 
 export function register(email, password) {
   return createUserWithEmailAndPassword(auth, email, password)
-    .then(async (user) => {
-      await setDoc(doc(db, "users", user.user.uid), emptyUser);
+    .then((user) => {
+      setDoc(doc(db, "users", user.user.uid), emptyUser);
       return user;
     })
     .catch((error) => error.message);
@@ -124,9 +124,9 @@ export function register(email, password) {
 export async function loginInWithGoogle() {
   const provider = new GoogleAuthProvider();
   return signInWithPopup(auth, provider)
-    .then(async (result) => {
+    .then((result) => {
       const credential = GoogleAuthProvider.credentialFromResult(result);
-      await setDoc(doc(db, "users", credential.uid), emptyUser);
+      setDoc(doc(db, "users", result.user.uid), emptyUser);
       window.location.href = "/home";
     })
     .catch((error) => error.message);
