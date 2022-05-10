@@ -126,7 +126,7 @@ function Login() {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              flexDirection: "column",
+              flexDirection: "column"
             }}
           >
             <Typography textAlign="center" sx={{ mt: 2 }} variant="body1">

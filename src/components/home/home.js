@@ -11,7 +11,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import NavBar from "../navbar/NavBar";
-import {ThemeProvider} from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material/styles";
 import theme from "../../Styles";
 
 function Home() {
@@ -107,7 +107,7 @@ function Home() {
                 p: 1,
                 margin: "0 auto",
                 backgroundColor: "primary.light",
-                color: "white"
+                color: "white",
               }}
             >
               Trending
@@ -124,7 +124,7 @@ function Home() {
                     backgroundColor: "white",
                     "&:hover": {
                       cursor: "pointer",
-                      boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.5)",
+                      boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.5)"
                     },
                   }}
                   onClick={() => {
@@ -288,7 +288,7 @@ function Home() {
           </Box>
         </Fragment>
       )}
-      </ThemeProvider>
+    </ThemeProvider>
   );
 }
 
