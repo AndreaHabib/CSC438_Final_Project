@@ -25,7 +25,7 @@ const List = ({ list, title, type }) => {
           <Box
             key={item.id}
             sx={{
-              //   width: "100%",
+              width: "100%",
               m: 2,
               p: 1,
               borderRadius: "20px",

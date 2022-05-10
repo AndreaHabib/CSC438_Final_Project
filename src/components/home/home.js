@@ -107,7 +107,7 @@ function Home() {
         <Fragment>
           <Box sx={{ flexGrow: 1, mt: 3 }}>
             <List list={trending} title="Trending Movies" type="movie" />
-            <List list={tvShow} title="Trending Tv Shows" type="tv" />
+            <List list={tvShow} title="Trending Tv Shows" type="show" />
             <List list={popular} title="Popular Movies" type="movie" />
             <List list={playingNow} title="Playing Now" type="movie" />
             <List list={upcoming} title="Upcoming" type="movie" />

@@ -52,7 +52,7 @@ const Favorites = () => {
       <List
         list={userInfo.favoriteTvShows}
         title="Favorite Tv Shows"
-        type="tv"
+        type="show"
       />
     </div>
   );
