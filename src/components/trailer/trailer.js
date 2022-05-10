@@ -22,11 +22,9 @@ export default function Trailer() {
 
         console.log(title);
 
-
         for (let i = 0; i < json.results.length; i++) {
             array[i] = json.results[i].id;
         }
-
 
         let movieId = array[0];
 
@@ -52,13 +50,12 @@ export default function Trailer() {
 
             <div>
 
-                <form className="search-cont" onSubmit={getTrailer} >
+                <form onSubmit={getTrailer} >
                     <input placeholder="Specific Movie Name"
                         type="text"
-                        className="form-control-lg border border-dark border-5"
                         value={search}
                         onChange={e => setSearch(e.target.value)} />
-                    <button className="btn btn-dark" id="search-btn" type="submit"> Search </button>
+                    <button type="submit"> Search </button>
                 </form>
 
 
