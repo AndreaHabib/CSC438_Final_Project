@@ -4,6 +4,9 @@ import { Typography, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../navbar/NavBar";
 import List from "../List";
+import { ThemeProvider } from "@mui/material/styles";
+import theme from "../../Styles";
+
 const Favorites = () => {
   const [userInfo, setUserInfo] = useState({
     favoriteMovies: [],
@@ -41,7 +44,7 @@ const Favorites = () => {
   }, []);
 
   return (
-    <div>
+    <ThemeProvider theme={theme}>
       <NavBar />
       <h1>Favorites</h1>
       <List
@@ -54,7 +57,7 @@ const Favorites = () => {
         title="Favorite Tv Shows"
         type="show"
       />
-    </div>
+    </ThemeProvider>
   );
 };
 

@@ -14,6 +14,8 @@ import {
   Alert,
   CircularProgress,
 } from "@mui/material";
+import { ThemeProvider } from "@mui/material/styles";
+import theme from "../../Styles";
 
 function Signup() {
   const navigate = useNavigate();
@@ -75,7 +77,7 @@ function Signup() {
   };
 
   return (
-    <Fragment>
+    <ThemeProvider theme={theme}>
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static">
           <Toolbar>
@@ -147,7 +149,7 @@ function Signup() {
           </Box>
         </Box>
       ) : undefined}
-    </Fragment>
+    </ThemeProvider>
   );
 }
 

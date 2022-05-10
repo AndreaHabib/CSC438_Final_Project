@@ -11,6 +11,8 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { addFavoriteTvShow } from "../../firebase-config";
+import { ThemeProvider } from "@mui/material/styles";
+import theme from "../../Styles";
 
 export default function Show() {
   const [show, setShow] = useState([]);
@@ -33,7 +35,7 @@ export default function Show() {
   }, [fetchShow]);
 
   return (
-    <Fragment>
+    <ThemeProvider theme={theme}>
       <NavBar />
 
       {loading ? (
@@ -213,6 +215,6 @@ export default function Show() {
           </Box>
         </Box>
       )}
-    </Fragment>
+    </ThemeProvider>
   );
 }
