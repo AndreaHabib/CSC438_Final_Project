@@ -5,6 +5,7 @@ import Home from "./components/home/Home";
 import Login from "./components/login/Login";
 import Hero from "./components/hero/Hero";
 import Movie from "./components/movie/Movie";
+import Favorites from "./components/favorites/Favorites";
 // import { Route, Routes } from 'react-router-dom';
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
         <Route exact path="/login" element={<Login />} />
         <Route exact path="/signup" element={<Signup />} />
         <Route exact path="/home" element={<Home />} />
+        <Route exact path="/favorites" element={<Favorites />} />
         <Route exact path="/movie/:id" element={<Movie />} />
         <Route exact path="/" element={<Hero />} />
       </Routes>

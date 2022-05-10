@@ -40,14 +40,14 @@ const db = getFirestore(app);
 
 export const auth = getAuth(app);
 
-const getUsersDoc = (uid) => {
+const getUsersDoc = () => {
   const usersCol = collection(db, "users");
-  const userDoc = doc(usersCol, uid);
+  const userDoc = doc(usersCol, auth.currentUser.uid);
   return userDoc;
 };
 
-export async function getUserInfo(uid) {
-  const userDoc = getUsersDoc(uid);
+export async function getUserInfo() {
+  const userDoc = getUsersDoc(auth.currentUser.uid);
   const user = await getDoc(userDoc);
   return user.data();
 }
@@ -57,18 +57,35 @@ const emptyUser = {
   favoriteTvShows: [],
 };
 
-export const resetUserInfo = (uid) => {
-  setDoc(getUsersDoc(uid), emptyUser);
+export const resetUserInfo = () => {
+  setDoc(getUsersDoc(auth.currentUser.uid), emptyUser);
   return emptyUser;
 };
 
-export const updateUserInfo = async (uid, data) => {
-  const userDoc = getUsersDoc(uid);
-  await setDoc(userDoc, data);
+export const addFavoriteTvShow = async (tvShowId) => {
+  const userDoc = getUsersDoc(auth.currentUser.uid);
+  const user = await getDoc(userDoc);
+  const { favoriteTvShows, favoriteMovies } = user.data();
+  const newFavoriteTvShows = [...favoriteTvShows, tvShowId];
+  await setDoc(userDoc, {
+    favoriteTvShows: newFavoriteTvShows,
+    favoriteMovies,
+  });
 };
 
-export const deleteFavoriteTvShow = async (uid, tvShowId) => {
-  const userDoc = getUsersDoc(uid);
+export const addFavoriteMovie = async (movieId) => {
+  const userDoc = getUsersDoc(auth.currentUser.uid);
+  const user = await getDoc(userDoc);
+  const { favoriteMovies, favoriteTvShows } = user.data();
+  const newFavoriteMovies = [...favoriteMovies, movieId];
+  await setDoc(userDoc, {
+    favoriteMovies: newFavoriteMovies,
+    favoriteTvShows,
+  });
+};
+
+export const deleteFavoriteTvShow = async (tvShowId) => {
+  const userDoc = getUsersDoc(auth.currentUser.uid);
   const user = await getDoc(userDoc);
   const data = {
     favoriteTvShows: user
@@ -79,8 +96,8 @@ export const deleteFavoriteTvShow = async (uid, tvShowId) => {
   await setDoc(userDoc, data);
 };
 
-export const deleteFavoriteMovie = (uid, movieId) => {
-  const userDoc = getUsersDoc(uid);
+export const deleteFavoriteMovie = (movieId) => {
+  const userDoc = getUsersDoc(auth.currentUser.uid);
   return setDoc(userDoc, {
     favoriteTvShows: userDoc.data().favoriteTvShows,
     favoriteMovies: userDoc
