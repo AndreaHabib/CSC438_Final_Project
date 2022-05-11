@@ -3,17 +3,30 @@ import { auth } from "../../firebase-config";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
+import { useNavigate, Link, useLocation } from "react-router-dom";
+import { MenuItem, Container } from "@mui/material";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
-import { useNavigate, Link } from "react-router-dom";
-import { ThemeProvider } from "@mui/material/styles";
-import theme from "../../Styles";
+import Button from "@mui/material/Button";
 
 export default function NavBar() {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const [anchorElNav, setAnchorEl] = React.useState(null);
+
+  const handleOpenNavMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = (location) => {
+    setAnchorEl(null);
+    navigate(location);
+  };
+
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   onAuthStateChanged(auth, (user) => {
     if (user) {
@@ -28,60 +41,122 @@ export default function NavBar() {
     await signOut(auth);
   };
   return (
-    <ThemeProvider theme={theme}>
-      <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static">
-          <Toolbar>
+    <AppBar position="static" sx={{ zIndex: "100", mb: 3 }}>
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          <Typography
+            variant="h6"
+            noWrap
+            component="a"
+            href="/"
+            sx={{
+              mr: 2,
+              display: { xs: "none", md: "flex" },
+              fontFamily: "monospace",
+              fontWeight: 700,
+              letterSpacing: ".3rem",
+              color: "inherit",
+              textDecoration: "none",
+            }}
+          >
+            MyMovie
+          </Typography>
+
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
-              edge="start"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleOpenNavMenu}
               color="inherit"
-              aria-label="menu"
-              sx={{ mr: 2 }}
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              MyMovie
-            </Typography>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorElNav}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+              open={Boolean(anchorElNav)}
+              onClose={handleCloseNavMenu}
+              sx={{
+                display: { xs: "block", md: "none" },
+              }}
+            >
+              <MenuItem onClick={() => handleCloseNavMenu("/home")}>
+                <Typography textAlign="center">Home</Typography>
+              </MenuItem>
+              <MenuItem onClick={() => handleCloseNavMenu("/favorites")}>
+                <Typography textAlign="center">Favorites</Typography>
+              </MenuItem>
+              {isAuthenticated ? (
+                <MenuItem onClick={logout}>
+                  <Typography textAlign="center">Logout</Typography>
+                </MenuItem>
+              ) : (
+                <MenuItem onClick={() => handleCloseNavMenu("/login")}>
+                  <Typography textAlign="center">Login</Typography>
+                </MenuItem>
+              )}
+            </Menu>
+          </Box>
+          <Typography
+            variant="h5"
+            noWrap
+            component="a"
+            href=""
+            sx={{
+              mr: 2,
+              display: { xs: "flex", md: "none" },
+              flexGrow: 1,
+              fontFamily: "monospace",
+              fontWeight: 700,
+              letterSpacing: ".3rem",
+              color: "inherit",
+              textDecoration: "none",
+            }}
+          >
+            MyMovie
+          </Typography>
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+            <Button
+              onClick={() => handleCloseNavMenu("/home")}
+              sx={{ my: 2, color: "white", display: "block" }}
+            >
+              Home
+            </Button>
+            <Button
+              onClick={() => handleCloseNavMenu("/favorites")}
+              sx={{ my: 2, color: "white", display: "block" }}
+            >
+              Home
+            </Button>
             {isAuthenticated ? (
-              <Fragment>
-                <Button color="inherit" onClick={logout}>
-                  Logout
-                </Button>
-                <Button
-                  color="inherit"
-                  onClick={() => {
-                    navigate("/home");
-                  }}
-                >
-                  Home
-                </Button>
-                <Button
-                  color="inherit"
-                  onClick={() => {
-                    navigate("/favorites");
-                  }}
-                >
-                  Favorites
-                </Button>
-                <Button
-                  color="inherit"
-                  onClick={() => {
-                    navigate("/trailer");
-                  }}
-                >
-                  Trailer
-                </Button>
-              </Fragment>
+              <Button
+                onClick={logout}
+                sx={{ my: 2, color: "white", display: "block" }}
+              >
+                Logout
+              </Button>
             ) : (
-              <Button component={Link} to="/" color="inherit">
+              <Button
+                onClick={() => handleCloseNavMenu("/login")}
+                sx={{ my: 2, color: "white", display: "block" }}
+              >
                 Login
               </Button>
             )}
-          </Toolbar>
-        </AppBar>
-      </Box>
-    </ThemeProvider>
+          </Box>
+        </Toolbar>
+      </Container>
+    </AppBar>
   );
 }
