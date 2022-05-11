@@ -20,7 +20,7 @@ function App() {
         <Route exact path="/favorites" element={<Favorites />} />
         <Route exact path="/movie/:id" element={<Movie />} />
         <Route exact path="/show/:id" element={<Show />} />
-        <Route exact path="/trailer" element={<Trailer />} />
+        <Route exact path="/trailers" element={<Trailer />} />
         <Route exact path="/" element={<Hero />} />
       </Routes>
     </Router>

@@ -97,6 +97,9 @@ export default function NavBar() {
               <MenuItem onClick={() => handleCloseNavMenu("/favorites")}>
                 <Typography textAlign="center">Favorites</Typography>
               </MenuItem>
+              <MenuItem onClick={() => handleCloseNavMenu("/trailers")}>
+                <Typography textAlign="center">Trailers</Typography>
+              </MenuItem>
               {isAuthenticated ? (
                 <MenuItem onClick={logout}>
                   <Typography textAlign="center">Logout</Typography>
@@ -132,6 +135,12 @@ export default function NavBar() {
               sx={{ my: 2, color: "white", display: "block" }}
             >
               Home
+            </Button>
+            <Button
+              onClick={() => handleCloseNavMenu("/trailers")}
+              sx={{ my: 2, color: "white", display: "block" }}
+            >
+              Trailers
             </Button>
             <Button
               onClick={() => handleCloseNavMenu("/favorites")}
