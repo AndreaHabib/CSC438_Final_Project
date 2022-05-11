@@ -137,7 +137,7 @@ export default function NavBar() {
               onClick={() => handleCloseNavMenu("/favorites")}
               sx={{ my: 2, color: "white", display: "block" }}
             >
-              Home
+              Favorites
             </Button>
             {isAuthenticated ? (
               <Button
