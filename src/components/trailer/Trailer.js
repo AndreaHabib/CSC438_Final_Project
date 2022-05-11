@@ -1,6 +1,7 @@
 import { async } from "@firebase/util";
 import React, { useState, useEffect, useCallback, Fragment } from "react";
 import NavBar from "../navbar/NavBar";
+import { FormGroup, FormControl, TextField, Button } from "@mui/material";
 
 export default function Trailer() {
   let array = [];
@@ -45,7 +46,7 @@ export default function Trailer() {
       <NavBar />
 
       <div>
-        <form onSubmit={getTrailer}>
+        {/* <form onSubmit={getTrailer}>
           <input
             placeholder="Specific Movie Name"
             type="text"
@@ -53,14 +54,36 @@ export default function Trailer() {
             onChange={(e) => setSearch(e.target.value)}
           />
           <button type="submit"> Search </button>
-        </form>
+        </form> */}
+        <FormGroup className="form">
+          <FormControl variant="standard" sx={{ width: "100%", m: 0.5 }}>
+            <TextField
+              variant="filled"
+              type="text"
+              required
+              onChange={(e) => setSearch(e.target.value)}
+              id="search"
+              label="Search for a movie"
+              aria-describedby="enter email"
+            />
+          </FormControl>
+          <FormControl variant="standard" sx={{ width: "100%", m: 0.5 }}>
+            <Button variant="contained" onClick={getTrailer}>
+              Search
+            </Button>
+          </FormControl>
+        </FormGroup>
 
-        <div className="video">
-          <iframe
-            width="100%"
-            src={`https://www.youtube.com/embed/` + key}
-          ></iframe>
-        </div>
+        {key && (
+          <div className="video">
+            <iframe
+              width="100%"
+              height="100%"
+              title="trailer"
+              src={`https://www.youtube.com/embed/${key}`}
+            ></iframe>
+          </div>
+        )}
       </div>
     </Fragment>
   );
